@@ -12,6 +12,16 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.hadi-digital.ir" }],
+        destination: "https://hadi-digital.ir/:path*",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

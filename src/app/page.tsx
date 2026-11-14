@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { CategoryIcon } from "@/components/category-icon";
@@ -17,6 +18,10 @@ import { getCategories, getProducts } from "@/lib/data";
 import { discountPercent, faNumber, toman } from "@/lib/format";
 
 const brands = ["Sony", "Samsung", "Xiaomi", "JBL", "Logitech", "Anker", "DJI", "Lenovo"];
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 const trustItems = [
   { icon: TruckIcon, title: "ارسال سریع", text: "تهران ۲۴ ساعته" },

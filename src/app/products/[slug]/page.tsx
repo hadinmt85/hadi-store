@@ -49,6 +49,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   return {
     title: product.name,
     description: `${product.tagline} — خرید ${product.name} با گارانتی ۱۸ ماهه از Hadi Digital.`,
+    alternates: { canonical: `/products/${product.slug}` },
   };
 }
 

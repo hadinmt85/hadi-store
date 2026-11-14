@@ -20,6 +20,7 @@ const siteDescription =
   "خرید آنلاین هدفون، ساعت هوشمند، موبایل، لپ‌تاپ و گجت‌های گیمینگ با گارانتی اصالت، ارسال سریع و ۷ روز ضمانت بازگشت کالا.";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://hadi-digital.ir"),
   applicationName: "Hadi Digital",
   title: {
     default: "Hadi Digital | فروشگاه گجت و کالای دیجیتال",

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CategoryIcon } from "@/components/category-icon";
 import { CloseIcon } from "@/components/icons";
+import { PriceRangeSlider } from "@/components/price-range-slider";
 import { categoryGroups } from "@/lib/category-groups";
 import { buildProductsUrl, ratingOptions, type ProductListParams } from "@/lib/product-query";
 import { faNumber } from "@/lib/format";
@@ -12,6 +13,7 @@ type FilterProps = {
   brands: BrandInfo[];
   params: ProductListParams;
   total: number;
+  priceBounds?: { min: number; max: number };
 };
 
 export function CategoryPanel({ categories, counts, params, total }: FilterProps) {
@@ -111,7 +113,12 @@ export function CategoryPanel({ categories, counts, params, total }: FilterProps
   );
 }
 
-export function FiltersPanel({ brands, params, className = "" }: FilterProps & { className?: string }) {
+export function FiltersPanel({
+  brands,
+  params,
+  priceBounds = { min: 0, max: 100_000_000 },
+  className = "",
+}: FilterProps & { className?: string }) {
   const resetHref = buildProductsUrl(params, {
     min: undefined,
     max: undefined,
@@ -144,27 +151,13 @@ export function FiltersPanel({ brands, params, className = "" }: FilterProps & {
 
       <div className="mt-4">
         <p className="text-[10.5px] font-bold text-ink-soft">محدودهٔ قیمت (تومان)</p>
-        <div className="mt-2 flex items-center gap-2">
-          <input
-            name="min"
-            defaultValue={params.min ?? ""}
-            inputMode="numeric"
-            dir="ltr"
-            placeholder="از"
-            aria-label="حداقل قیمت"
-            className="field h-9 px-2 text-[11px]"
-          />
-          <span className="text-mute">—</span>
-          <input
-            name="max"
-            defaultValue={params.max ?? ""}
-            inputMode="numeric"
-            dir="ltr"
-            placeholder="تا"
-            aria-label="حداکثر قیمت"
-            className="field h-9 px-2 text-[11px]"
-          />
-        </div>
+        <PriceRangeSlider
+          key={`${params.min ?? "min"}-${params.max ?? "max"}`}
+          lowerBound={priceBounds.min}
+          upperBound={priceBounds.max}
+          initialMin={params.min}
+          initialMax={params.max}
+        />
       </div>
 
       <div className="mt-4 border-t border-line pt-3">

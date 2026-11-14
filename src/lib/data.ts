@@ -242,6 +242,22 @@ export async function getProductCount(filters: ProductQuery = {}): Promise<numbe
   return Number(rows[0]?.count ?? 0);
 }
 
+export async function getPriceBounds(): Promise<{ min: number; max: number }> {
+  "use cache";
+  cacheTag("products");
+  cacheLife("hours");
+
+  const rows = await query<{ min: number | null; max: number | null }>(
+    `SELECT MIN(price)::int AS min, MAX(price)::int AS max FROM products`,
+  );
+  const step = 100_000;
+  const rawMin = Number(rows[0]?.min ?? 0);
+  const rawMax = Number(rows[0]?.max ?? 100_000_000);
+  const min = Math.max(0, Math.floor(rawMin / step) * step);
+  const max = Math.max(min + step, Math.ceil(rawMax / step) * step);
+  return { min, max };
+}
+
 export async function getBrands(): Promise<BrandInfo[]> {
   "use cache";
   cacheTag("products");

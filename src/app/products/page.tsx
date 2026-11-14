@@ -8,7 +8,7 @@ import {
   FiltersPanel,
 } from "@/components/product-filters";
 import { ProductPagination } from "@/components/product-pagination";
-import { getBrands, getCategories, getCategoryCounts, getProductCount, getProducts } from "@/lib/data";
+import { getBrands, getCategories, getCategoryCounts, getPriceBounds, getProductCount, getProducts } from "@/lib/data";
 import { faNumber } from "@/lib/format";
 import {
   buildProductsUrl,
@@ -68,12 +68,13 @@ async function Results({ searchParams }: { searchParams: Promise<Search> }) {
   const parsed = parseProductListParams(raw);
   const filters = toProductQuery(parsed);
 
-  const [categories, brands, counts, total, allTotal] = await Promise.all([
+  const [categories, brands, counts, total, allTotal, priceBounds] = await Promise.all([
     getCategories(),
     getBrands(),
     getCategoryCounts(),
     getProductCount(filters),
     getProductCount(),
+    getPriceBounds(),
   ]);
 
   const totalPages = Math.max(1, Math.ceil(total / PRODUCTS_PAGE_SIZE));
@@ -89,7 +90,7 @@ async function Results({ searchParams }: { searchParams: Promise<Search> }) {
   const activeCategory = categories.find((item) => item.slug === params.category);
   const start = total === 0 ? 0 : (page - 1) * PRODUCTS_PAGE_SIZE + 1;
   const end = Math.min(page * PRODUCTS_PAGE_SIZE, total);
-  const filterProps = { categories, counts, brands, params, total: allTotal };
+  const filterProps = { categories, counts, brands, params, total: allTotal, priceBounds };
 
   return (
     <div className="mt-4 grid gap-4 md:grid-cols-[15rem_1fr]">
